@@ -7,15 +7,15 @@ import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import test from "node:test";
 import { promisify } from "node:util";
-import { decodeAntigravityGeneration, protobufFields, scanAntigravityDb } from "../../herdr-insights/mods/insights/core/antigravity.mjs";
-import { emptyStore, snapshotRows } from "../../herdr-insights/mods/insights/core/store.mjs";
-import { scanSources } from "../../herdr-insights/mods/insights/core/scan.mjs";
-import { readWorkerClaim, writeFence } from "../../herdr-insights/mods/insights/core/fence.mjs";
-import { ensureIndexer } from "../../herdr-insights/mods/insights/core/indexer-control.mjs";
-import { readLiveProgress } from "../../herdr-insights/mods/insights/core/progress.mjs";
-import { isProcessAlive, sleep } from "../../herdr-insights/mods/insights/core/util.mjs";
+import { decodeAntigravityGeneration, protobufFields, scanAntigravityDb } from "../../herdr-insights/mods/insights-remote/core/antigravity.mjs";
+import { emptyStore, snapshotRows } from "../../herdr-insights/mods/insights-remote/core/store.mjs";
+import { scanSources } from "../../herdr-insights/mods/insights-remote/core/scan.mjs";
+import { readWorkerClaim, writeFence } from "../../herdr-insights/mods/insights-remote/core/fence.mjs";
+import { ensureIndexer } from "../../herdr-insights/mods/insights-remote/core/indexer-control.mjs";
+import { readLiveProgress } from "../../herdr-insights/mods/insights-remote/core/progress.mjs";
+import { isProcessAlive, sleep } from "../../herdr-insights/mods/insights-remote/core/util.mjs";
 
-const collector = new URL("../../herdr-insights/mods/insights/collector.mjs", import.meta.url);
+const collector = new URL("../../herdr-insights/mods/insights-remote/collector.mjs", import.meta.url);
 function vi(value) {
   let n = BigInt(value); const out = [];
   do { const b = Number(n & 127n); n >>= 7n; out.push(b | (n ? 128 : 0)); } while (n);
@@ -35,7 +35,7 @@ async function env(t) {
   const home = path.join(root, "home");
   await mkdir(path.join(home, "conversations"), { recursive: true });
   await mkdir(path.join(home, "brain"), { recursive: true });
-  return { root, home, store: path.join(root, "data/insights.json"), sources: [{ id: "agy", label: "Antigravity", adapter: "antigravity", roots: ["~/conversations", "~/brain"] }] };
+  return { root, home, store: path.join(root, "data/insights-remote.json"), sources: [{ id: "agy", label: "Antigravity", adapter: "antigravity", roots: ["~/conversations", "~/brain"] }] };
 }
 function database(context, name = "conv", records = [{ idx: 0, ...generation() }]) {
   const file = path.join(context.home, "conversations", `${name}.db`);
@@ -380,7 +380,7 @@ test("Antigravity keeps the SQLite statement alive when GC runs during iteration
   db.exec(`WITH RECURSIVE n(i) AS (SELECT 1 UNION ALL SELECT i + 1 FROM n WHERE i < 256)
     INSERT INTO gen_metadata SELECT i, (SELECT data FROM gen_metadata WHERE idx = 0) FROM n`);
   db.close();
-  const core = new URL("../../herdr-insights/mods/insights/core/", import.meta.url);
+  const core = new URL("../../herdr-insights/mods/insights-remote/core/", import.meta.url);
   const script = `
     import assert from "node:assert/strict";
     import { scanAntigravityDb } from ${JSON.stringify(new URL("antigravity.mjs", core).href)};

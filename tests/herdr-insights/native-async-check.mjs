@@ -37,16 +37,16 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { normalizeConfig, todayKey } from "../../herdr-insights/mods/insights/analytics.js";
+import { normalizeConfig, todayKey } from "../../herdr-insights/mods/insights-remote/analytics.js";
 import {
   emptyStore,
   newFileEntry,
   saveStore,
-} from "../../herdr-insights/mods/insights/core/store.mjs";
-import { run as runPresenter } from "../../herdr-insights/mods/insights/presenter.mjs";
+} from "../../herdr-insights/mods/insights-remote/core/store.mjs";
+import { run as runPresenter } from "../../herdr-insights/mods/insights-remote/presenter.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const modSource = resolve(here, "../../herdr-insights/mods/insights");
+const modSource = resolve(here, "../../herdr-insights/mods/insights-remote");
 
 function argument(name, fallback) {
   const index = process.argv.indexOf(name);
@@ -173,8 +173,8 @@ if (!process.argv.includes("--allow-window")) {
 const home = realpathSync(mkdtempSync(join(tmpdir(), "insights-native-async-")));
 const logPath = "/tmp/insights-native-async.log";
 const shotPath = argument("--shot", "/tmp/insights-native-async.png");
-const mod = join(home, "mods", "insights");
-const storePath = join(home, "data", "insights", "insights.json");
+const mod = join(home, "mods", "insights-remote");
+const storePath = join(home, "data", "insights-remote", "insights.json");
 const markerPath = join(home, "rendered-requested-state.json");
 const markerScript = join(home, "write-render-marker.mjs");
 const appBinary = process.env.HERDR_APP_BINARY ?? "/Applications/Herdr.app/Contents/MacOS/Herdr";
@@ -283,7 +283,7 @@ try {
       id: "root",
       type: "row",
       background: "canvas",
-      children: [{ id: "insights", type: "block", content: { mod: "insights" } }],
+      children: [{ id: "insights", type: "block", content: { mod: "insights-remote" } }],
     }, null, 2)}\n`,
   );
   writeFileSync(join(home, "settings.json"), `${JSON.stringify(appearance ? { zoom: 1, appearance } : { zoom: 1 })}\n`);

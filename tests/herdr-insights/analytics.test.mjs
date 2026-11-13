@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 
 // Exercise the file as an ES module without relying on a package.json "type".
 process.env.TZ = "America/New_York";
-const source = await readFile(new URL("../../herdr-insights/mods/insights/analytics.js", import.meta.url), "utf8");
+const source = await readFile(new URL("../../herdr-insights/mods/insights-remote/analytics.js", import.meta.url), "utf8");
 const analytics = await import(`data:text/javascript;base64,${Buffer.from(source).toString("base64")}`);
 const {
   addDays,
@@ -477,7 +477,7 @@ function snapshot(overrides = {}) {
     generatedAt: "2024-01-10T12:00:00Z",
     lastScanAt: "2024-01-10T12:00:00Z",
     config: {
-      profile: { name: "Ada", handle: "ada", avatar: "mods/insights/avatar.png" },
+      profile: { name: "Ada", handle: "ada", avatar: "mods/insights-remote/avatar.png" },
       palette: "blue",
       includeCache: true,
       weekStartsOn: 0,

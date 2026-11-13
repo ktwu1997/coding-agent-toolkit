@@ -7,20 +7,20 @@ import { fileURLToPath } from "node:url";
 import * as zlib from "node:zlib";
 import test from "node:test";
 
-import { collectSnapshot } from "../../herdr-insights/mods/insights/collector.mjs";
-import { normalizeConfig } from "../../herdr-insights/mods/insights/core/config.mjs";
-import { readWorkerClaim } from "../../herdr-insights/mods/insights/core/fence.mjs";
-import { ensureIndexer } from "../../herdr-insights/mods/insights/core/indexer-control.mjs";
-import { emptyStore, loadStore, snapshotRows } from "../../herdr-insights/mods/insights/core/store.mjs";
+import { collectSnapshot } from "../../herdr-insights/mods/insights-remote/collector.mjs";
+import { normalizeConfig } from "../../herdr-insights/mods/insights-remote/core/config.mjs";
+import { readWorkerClaim } from "../../herdr-insights/mods/insights-remote/core/fence.mjs";
+import { ensureIndexer } from "../../herdr-insights/mods/insights-remote/core/indexer-control.mjs";
+import { emptyStore, loadStore, snapshotRows } from "../../herdr-insights/mods/insights-remote/core/store.mjs";
 import {
   isProcessAlive,
   readStoreLockInfo,
   sleep,
-} from "../../herdr-insights/mods/insights/core/util.mjs";
+} from "../../herdr-insights/mods/insights-remote/core/util.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const launcher = path.join(here, "lifecycle-launcher.mjs");
-const presenter = path.join(here, "../../herdr-insights/mods/insights/presenter.mjs");
+const presenter = path.join(here, "../../herdr-insights/mods/insights-remote/presenter.mjs");
 
 const codexSource = {
   id: "codex",

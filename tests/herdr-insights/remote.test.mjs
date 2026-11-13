@@ -6,9 +6,9 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
-import { deriveDashboard } from "../../herdr-insights/mods/insights/analytics.js";
-import { mergeSnapshots } from "../../herdr-insights/mods/insights/merge.mjs";
-import { buildRemoteBundle, loadMachineRecords } from "../../herdr-insights/mods/insights/core/machines.mjs";
+import { deriveDashboard } from "../../herdr-insights/mods/insights-remote/analytics.js";
+import { mergeSnapshots } from "../../herdr-insights/mods/insights-remote/merge.mjs";
+import { buildRemoteBundle, loadMachineRecords } from "../../herdr-insights/mods/insights-remote/core/machines.mjs";
 import {
   installCommand,
   machineFileStem,
@@ -19,10 +19,10 @@ import {
   rowsFileText,
   stateFileText,
   syncMachine,
-} from "../../herdr-insights/mods/insights/remote.mjs";
+} from "../../herdr-insights/mods/insights-remote/remote.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const modDir = path.resolve(here, "../../herdr-insights/mods/insights");
+const modDir = path.resolve(here, "../../herdr-insights/mods/insights-remote");
 const fixtures = path.join(here, "fixtures");
 
 function envelope(rows = [], extra = {}) {

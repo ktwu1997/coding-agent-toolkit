@@ -54,17 +54,17 @@ test("standalone distribution installs one mod and a single-mod toolbar without 
   assertSuccess(result);
   assert.match(result.stdout, /herdr-app check passed/);
   const log = await readLog(fake);
-  const checks = await assertStagedChecks(log, ["insights"], appHome);
+  const checks = await assertStagedChecks(log, ["insights-remote"], appHome);
   assert.deepEqual(log.map((entry) => entry.args), [
     ["status"],
     ...checks,
     ["do", "layout.clone", '{"name":"main","as":"main-insights"}'],
   ]);
-  assert.deepEqual((await fs.readdir(path.join(appHome, "mods"))).sort(), ["insights"]);
-  await assert.rejects(fs.lstat(path.join(appHome, "data/insights/launcher-install-manifest.json")), { code: "ENOENT" });
+  assert.deepEqual((await fs.readdir(path.join(appHome, "mods"))).sort(), ["insights-remote"]);
+  await assert.rejects(fs.lstat(path.join(appHome, "data/insights-remote/launcher-install-manifest.json")), { code: "ENOENT" });
   const layout = await readJson(path.join(appHome, "layouts/main-insights.json"));
   assert.deepEqual(toolbarButton(layout).content, SINGLE_TOOLBAR_CONTENT);
-  const record = await readJson(path.join(appHome, "data/insights/toolbar-install.json"));
+  const record = await readJson(path.join(appHome, "data/insights-remote/toolbar-install.json"));
   const text = await fs.readFile(path.join(appHome, "layouts/main-insights.json"), "utf8");
   assert.equal(record.hash, hash(text));
   assert.equal(log.filter((entry) => entry.args[1] === "mod.open").length, 0, "no floating window");
@@ -78,9 +78,9 @@ test("one mod reinstalls idempotently and uninstall preserves data and local edi
   const fake = await createFakeRunner(root);
   assertSuccess(runInstall({ appHome, fake, sourceRoot }));
   let log = await readLog(fake);
-  await assertStagedChecks(log, ["insights"], appHome);
-  const manifest = await readJson(path.join(appHome, "data/insights/install-manifest.json"));
-  assert.equal(manifest.target, "mods/insights");
+  await assertStagedChecks(log, ["insights-remote"], appHome);
+  const manifest = await readJson(path.join(appHome, "data/insights-remote/install-manifest.json"));
+  assert.equal(manifest.target, "mods/insights-remote");
   assert.deepEqual(toolbarButton(await readJson(path.join(appHome, "layouts/main-insights.json"))).content,
     SINGLE_TOOLBAR_CONTENT);
 
@@ -94,9 +94,9 @@ test("one mod reinstalls idempotently and uninstall preserves data and local edi
     assert.equal(await fs.readFile(path.join(appHome, relative), "utf8"), content);
   }
 
-  const targetMain = path.join(appHome, "mods/insights/main.js");
+  const targetMain = path.join(appHome, "mods/insights-remote/main.js");
   await fs.writeFile(targetMain, "local dashboard edit\n");
-  await fs.writeFile(path.join(sourceRoot, "mods/insights/main.js"), "new dashboard\n");
+  await fs.writeFile(path.join(sourceRoot, "mods/insights-remote/main.js"), "new dashboard\n");
   const refused = runInstall({ appHome, fake, sourceRoot });
   assertFailure(refused);
   assert.match(refused.stderr, /Owned file was edited locally/);
@@ -104,11 +104,11 @@ test("one mod reinstalls idempotently and uninstall preserves data and local edi
 
   assertSuccess(runUninstall({ appHome, fake }));
   assert.equal(await exists(path.join(appHome, "layouts/main-insights.json")), false);
-  assert.equal(await exists(path.join(appHome, "data/insights/toolbar-install.json")), false);
+  assert.equal(await exists(path.join(appHome, "data/insights-remote/toolbar-install.json")), false);
   assert.equal(await fs.readFile(targetMain, "utf8"), "local dashboard edit\n");
-  assert.equal(await exists(path.join(appHome, "mods/insights/mod.json")), false);
-  assert.equal(await fs.readFile(path.join(appHome, "data/insights/insights.json"), "utf8"),
-    APP_FILES["data/insights/insights.json"]);
+  assert.equal(await exists(path.join(appHome, "mods/insights-remote/mod.json")), false);
+  assert.equal(await fs.readFile(path.join(appHome, "data/insights-remote/insights.json"), "utf8"),
+    APP_FILES["data/insights-remote/insights.json"]);
 });
 
 test("mod collisions and links fail before the mod or toolbar is written, even with --force", async (t) => {
@@ -117,11 +117,11 @@ test("mod collisions and links fail before the mod or toolbar is written, even w
   const fake = await createFakeRunner(root);
   for (const kind of ["unowned", "symlink"]) {
     const appHome = path.join(root, kind);
-    const target = path.join(appHome, "mods/insights");
+    const target = path.join(appHome, "mods/insights-remote");
     if (kind === "unowned") await writeTree(target, { "main.js": "unowned\n" });
     else {
       await fs.mkdir(path.dirname(target), { recursive: true });
-      await fs.symlink(path.join(sourceRoot, "mods/insights"), target);
+      await fs.symlink(path.join(sourceRoot, "mods/insights-remote"), target);
     }
     const refused = runInstall({ appHome, fake, sourceRoot, extra: ["--force"] });
     assertFailure(refused);
@@ -143,7 +143,7 @@ test("a native check failure never clones a layout or opens a dashboard tab", as
   assert.equal(log.filter((entry) => entry.args[0] === "check").length, 1);
   assert.equal(log.filter((entry) => entry.args[0] === "do").length, 0);
   assert.equal(log.filter((entry) => entry.args[1] === "tab.new").length, 0);
-  assert.equal(await exists(path.join(appHome, "mods/insights")), false);
+  assert.equal(await exists(path.join(appHome, "mods/insights-remote")), false);
 });
 
 test("toolbar refuses unsupported layouts and state symlinks before writing the mod", async (t) => {
@@ -168,7 +168,7 @@ test("toolbar refuses unsupported layouts and state symlinks before writing the 
     const refused = runInstall({ appHome, fake, sourceRoot, extra: ["--force"] });
     assertFailure(refused);
     assert.match(refused.stderr, /cannot be integrated safely|symbolic link/);
-    assert.equal(await exists(path.join(appHome, "mods/insights")), false);
+    assert.equal(await exists(path.join(appHome, "mods/insights-remote")), false);
     assert.equal(await exists(path.join(appHome, "layouts/main-insights.json")), false);
   }
 });
@@ -218,7 +218,7 @@ test("toolbar skips layout/state collisions, preserves click state, and can rein
   await fs.symlink(outside, path.join(appHome, "layouts/.state/main-insights-3.json"));
   const fake = await createFakeRunner(root);
   assertSuccess(runInstall({ appHome, fake, sourceRoot }));
-  const recordFile = path.join(appHome, "data/insights/toolbar-install.json");
+  const recordFile = path.join(appHome, "data/insights-remote/toolbar-install.json");
   assert.equal((await readJson(recordFile)).layout, "main-insights-4");
   const stateFile = path.join(appHome, "layouts/.state/main-insights-4.json");
   assert.equal(await fs.readFile(stateFile, "utf8"), state);
@@ -247,8 +247,8 @@ test("uninstall verifies the original layout exists and actually became selected
     assertFailure(refused);
     assert.match(refused.stderr, /Original layout main is missing|Herdr did not leave/);
     assert.equal(await exists(path.join(appHome, "layouts/main-insights.json")), true);
-    assert.equal(await exists(path.join(appHome, "mods/insights/main.js")), true);
-    assert.equal(await exists(path.join(appHome, "data/insights/toolbar-install.json")), true);
+    assert.equal(await exists(path.join(appHome, "mods/insights-remote/main.js")), true);
+    assert.equal(await exists(path.join(appHome, "data/insights-remote/toolbar-install.json")), true);
   }
 });
 
@@ -259,13 +259,13 @@ test("toolbar ownership records reject traversal and do not overwrite personal f
   const appHome = path.join(root, "app");
   await writeTree(appHome, {
     ...APP_FILES,
-    "data/insights/toolbar-install.json": JSON.stringify({ version: 1, owner: "herdr-insights-toolbar",
+    "data/insights-remote/toolbar-install.json": JSON.stringify({ version: 1, owner: "herdr-insights-toolbar",
       source: "../escape", layout: "../escape-insights", hash: "a".repeat(64) }),
   });
   const refused = runInstall({ appHome, fake, sourceRoot });
   assertFailure(refused);
   assert.match(refused.stderr, /Invalid toolbar ownership record/);
-  assert.equal(await exists(path.join(appHome, "mods/insights")), false);
+  assert.equal(await exists(path.join(appHome, "mods/insights-remote")), false);
   assert.deepEqual(await readLog(fake), []);
   assertFailure(runUninstall({ appHome, fake }));
 });

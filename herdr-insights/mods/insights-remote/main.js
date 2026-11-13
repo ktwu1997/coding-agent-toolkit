@@ -54,7 +54,7 @@ const MIN_CELL = 12;
 const MAX_CELL = 20;
 const CELL_GAP = 2;
 const DAY_LABEL_WIDTH = 30;
-const TAB = { name: "Insights", mod: "insights" };
+const TAB = { name: "Insights", mod: "insights-remote" };
 
 function shortFileName(value) {
   if (typeof value !== "string" || value.length === 0) return "";
@@ -72,7 +72,7 @@ function exportStamp(date) {
 function showInsights() {
   const active = spaces().find((space) => space.active);
   const tabIds = new Set(active?.tabs.map((tab) => tab.id) ?? []);
-  const open = panes().find((pane) => pane.mod === "insights" && tabIds.has(pane.tab));
+  const open = panes().find((pane) => pane.mod === "insights-remote" && tabIds.has(pane.tab));
   if (open) {
     // A layout block is not a dashboard pane: only pane info can be focused.
     // Selecting a tab keeps its previous zoom, so reveal the dashboard without
@@ -213,8 +213,8 @@ function menuTrigger(id, label, valueLabel, active, c) {
     .child(div().text_size(11).text_color(c.dim).child("⌄"));
 }
 const DEFAULT_NODE = "node";
-const RUNTIME_FILE = "mods/insights/runtime.json";
-const PRESENTER_FILE = "mods/insights/presenter.mjs";
+const RUNTIME_FILE = "mods/insights-remote/runtime.json";
+const PRESENTER_FILE = "mods/insights-remote/presenter.mjs";
 const ACTIVITY_TIMEOUT_MS = 35_000;
 
 const HEAT_COLORS = {
@@ -574,7 +574,7 @@ export default class Insights extends View {
         } catch {
           break;
         }
-        const name = String(command).replace(/^insights\./, "");
+        const name = String(command).replace(/^insights-remote\./, "");
         if (name === "refresh") this.refresh(commandCx);
         else if (name === "settings") this.openSettings(commandCx);
         else if (name === "dashboard") {
@@ -790,7 +790,7 @@ export default class Insights extends View {
   }
 
   storePath() {
-    return `${appHome()}/data/insights/insights.json`;
+    return `${appHome()}/data/insights-remote/insights.json`;
   }
 
   schedule(cx) {
@@ -805,11 +805,11 @@ export default class Insights extends View {
   }
 
   machinesDir() {
-    return `${appHome()}/data/insights/machines`;
+    return `${appHome()}/data/insights-remote/machines`;
   }
 
   remoteSettingsPath() {
-    return `${appHome()}/data/insights/remote.json`;
+    return `${appHome()}/data/insights-remote/remote.json`;
   }
 
   remoteView(name) {
@@ -922,7 +922,7 @@ export default class Insights extends View {
     this.remoteDisabled = disabled;
     cx.spawn(async (writeCx) => {
       try {
-        await mkdir(`${appHome()}/data/insights`, { recursive: true });
+        await mkdir(`${appHome()}/data/insights-remote`, { recursive: true });
         await writeFile(this.remoteSettingsPath(), `${JSON.stringify({ disabled }, null, 2)}\n`);
       } catch (error) {
         this.saveError = sanitizeError(error);
@@ -1686,7 +1686,7 @@ export default class Insights extends View {
         .hover((style) => style.bg(t.hover).text_color(t.foreground))
         .on_mouse_down("left", (_event, cx) => cx.stop_propagation())
         .on_click(() => showInsights())
-        .child(svg("mods/insights/insights.svg").size(14))
+        .child(svg("mods/insights-remote/insights.svg").size(14))
         .child("Insights"));
   }
 
@@ -2169,7 +2169,7 @@ export default class Insights extends View {
         .child(h_flex().size(26).flex_none().rounded(R.control).bg(c.secondary).border_1().border_color(c.border)
           .items_center().justify_center()
           .child(logo
-            ? svg(`mods/insights/logos/${logo}`).size(14).text_color(c.mutedForeground)
+            ? svg(`mods/insights-remote/logos/${logo}`).size(14).text_color(c.mutedForeground)
             : div().text_size(9).font_semibold().text_color(c.mutedForeground).child(initials(entry.name, 1))))
         .child(v_flex().flex_1().min_w(0).gap(1)
           .child(div().text_size(12).font_medium().text_color(c.text).truncate().tooltip(entry.name).child(entry.name))

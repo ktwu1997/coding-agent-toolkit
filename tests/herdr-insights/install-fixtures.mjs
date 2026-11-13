@@ -28,11 +28,11 @@ export const TOOLBAR_LAYOUT = JSON.stringify({ id: "root", type: "column", child
   { id: "main", type: "block", content: { tab: "active" } },
 ] }) + "\n";
 
-export const SINGLE_TOOLBAR_CONTENT = { mod: "insights", props: { mode: "toolbar" } };
+export const SINGLE_TOOLBAR_CONTENT = { mod: "insights-remote", props: { mode: "toolbar" } };
 
 export const APP_FILES = {
-  "data/insights/insights.json": '{"version":1,"keep":"local"}\n',
-  "data/insights/local-note.txt": "local data\n",
+  "data/insights-remote/insights.json": '{"version":1,"keep":"local"}\n',
+  "data/insights-remote/local-note.txt": "local data\n",
   "keys.json": '{"global":{"ctrl-shift-t":"tab.new"}}\n',
   "layouts/main.json": TOOLBAR_LAYOUT,
   "mods/other/main.js": "export default class Other {}\n",
@@ -49,7 +49,7 @@ export async function temporaryRoot(t) {
 
 export async function createSource(root, files = DEFAULT_MOD_FILES, name = "reviewed source") {
   const sourceRoot = path.join(root, name);
-  await writeTree(path.join(sourceRoot, "mods", "insights"), files);
+  await writeTree(path.join(sourceRoot, "mods", "insights-remote"), files);
   await writeTree(sourceRoot, {
     "README.md": "not part of the mod\n",
     "keys.json": '{"global":{}}\n',

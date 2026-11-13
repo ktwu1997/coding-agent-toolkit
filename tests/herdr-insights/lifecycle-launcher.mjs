@@ -4,7 +4,7 @@
 // deterministic zero budget, so every process promotes instead of finishing the
 // archive itself. The delay is a synthetic test hook, never production behavior.
 import { existsSync } from "node:fs";
-import { collectSnapshot } from "../../herdr-insights/mods/insights/collector.mjs";
+import { collectSnapshot } from "../../herdr-insights/mods/insights-remote/collector.mjs";
 
 const [store, home, gate, delayMs = "40"] = process.argv.slice(2);
 if (!store || !home || !gate) {

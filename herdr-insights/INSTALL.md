@@ -12,7 +12,7 @@ From the parent of `herdr-insights/`; no `npm install` needed:
 npm run install:local --prefix herdr-insights
 ```
 
-The installer checks `mods/insights` before copying it to the app home, which
+The installer checks `mods/insights-remote` before copying it to the app home, which
 defaults to `$HERDR_APP_HOME` or `~/.config/herdr-app`. First install creates and
 selects a personal layout whose **Insights** button sits beside the native tabs.
 Reinstall updates owned files without rewriting layouts. Shipped tabs, keys, and

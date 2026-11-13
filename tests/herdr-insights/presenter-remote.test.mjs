@@ -4,9 +4,9 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { gunzipSync, gzipSync } from "node:zlib";
-import { THIS_COMPUTER } from "../../herdr-insights/mods/insights/analytics.js";
-import { run } from "../../herdr-insights/mods/insights/presenter.mjs";
-import { rowsFileText, stateFileText } from "../../herdr-insights/mods/insights/remote.mjs";
+import { THIS_COMPUTER } from "../../herdr-insights/mods/insights-remote/analytics.js";
+import { run } from "../../herdr-insights/mods/insights-remote/presenter.mjs";
+import { rowsFileText, stateFileText } from "../../herdr-insights/mods/insights-remote/remote.mjs";
 
 function row(day, session, total) {
   return {
@@ -28,7 +28,7 @@ function envelope(rows) {
 async function context(t) {
   const root = await mkdtemp(path.join(os.tmpdir(), "insights-presenter-remote-"));
   t.after(() => rm(root, { recursive: true, force: true }));
-  const store = path.join(root, "data/insights.json");
+  const store = path.join(root, "data/insights-remote.json");
   const machines = path.join(root, "data/machines");
   await mkdir(machines, { recursive: true });
   const save = (name, rows, extra = {}) => Promise.all([

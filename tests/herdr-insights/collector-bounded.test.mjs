@@ -4,10 +4,10 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 
-import { collectSnapshot } from "../../herdr-insights/mods/insights/collector.mjs";
-import { normalizeConfig } from "../../herdr-insights/mods/insights/core/config.mjs";
-import { scanSources } from "../../herdr-insights/mods/insights/core/scan.mjs";
-import { emptyStore, snapshotRows } from "../../herdr-insights/mods/insights/core/store.mjs";
+import { collectSnapshot } from "../../herdr-insights/mods/insights-remote/collector.mjs";
+import { normalizeConfig } from "../../herdr-insights/mods/insights-remote/core/config.mjs";
+import { scanSources } from "../../herdr-insights/mods/insights-remote/core/scan.mjs";
+import { emptyStore, snapshotRows } from "../../herdr-insights/mods/insights-remote/core/store.mjs";
 
 const piSource = [{
   id: "pi",

@@ -8,21 +8,21 @@ import test from "node:test";
 import {
   collectSnapshot,
   readCommittedSnapshot,
-} from "../../herdr-insights/mods/insights/collector.mjs";
-import { normalizeConfig } from "../../herdr-insights/mods/insights/core/config.mjs";
+} from "../../herdr-insights/mods/insights-remote/collector.mjs";
+import { normalizeConfig } from "../../herdr-insights/mods/insights-remote/core/config.mjs";
 import {
   atomicWriteJson,
   withStoreLock,
-} from "../../herdr-insights/mods/insights/core/util.mjs";
+} from "../../herdr-insights/mods/insights-remote/core/util.mjs";
 import {
   workerClaimPath,
-} from "../../herdr-insights/mods/insights/core/fence.mjs";
+} from "../../herdr-insights/mods/insights-remote/core/fence.mjs";
 import {
   emptyStore,
   newFileEntry,
   saveStore,
-} from "../../herdr-insights/mods/insights/core/store.mjs";
-import { run as runPresenter } from "../../herdr-insights/mods/insights/presenter.mjs";
+} from "../../herdr-insights/mods/insights-remote/core/store.mjs";
+import { run as runPresenter } from "../../herdr-insights/mods/insights-remote/presenter.mjs";
 
 const WORKER_TOKEN = "live-progress-job-token";
 

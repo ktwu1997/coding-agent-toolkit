@@ -4,8 +4,8 @@ import { readFile } from "node:fs/promises";
 
 import { PACKAGE_ROOT, collectSourceFiles } from "../../herdr-insights/scripts/lib.mjs";
 
-const uiSource = await readFile(new URL("../../herdr-insights/mods/insights/ui.js", import.meta.url), "utf8");
-const mainSource = await readFile(new URL("../../herdr-insights/mods/insights/main.js", import.meta.url), "utf8");
+const uiSource = await readFile(new URL("../../herdr-insights/mods/insights-remote/ui.js", import.meta.url), "utf8");
+const mainSource = await readFile(new URL("../../herdr-insights/mods/insights-remote/main.js", import.meta.url), "utf8");
 
 function createElement(type) {
   const node = { type, calls: [], childNodes: [], style: {} };
@@ -236,5 +236,5 @@ test("the shared visual module is theme-driven, shadow-free and part of the inst
   has(mainSource, /from "\.\/ui\.js"/);
 
   const source = await collectSourceFiles(PACKAGE_ROOT);
-  assert.equal(source.files.some((file) => file.relative === "ui.js"), true, "installer copies mods/insights recursively");
+  assert.equal(source.files.some((file) => file.relative === "ui.js"), true, "installer copies mods/insights-remote recursively");
 });

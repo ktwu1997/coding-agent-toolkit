@@ -39,13 +39,13 @@ Usage:
 Options:
   --open                Open an Insights tab after installation (optional)
   --force               Replace owned files edited locally (never unowned files or links)
-  --source <folder>     Source package folder containing mods/insights (development)
+  --source <folder>     Source package folder containing mods/insights-remote (development)
   --app-home <folder>   Herdr app home (default: $HERDR_APP_HOME or ~/.config/herdr-app)
   -h, --help            Show this help
 
-The installer copies mods/insights and creates a personal layout with an Insights
+The installer copies mods/insights-remote and creates a personal layout with an Insights
 button beside the original tabs mod. It never edits shipped layouts/mods, keys,
-terminals, or insights.json. It generates mods/insights/runtime.json with the
+terminals, or insights.json. It generates mods/insights-remote/runtime.json with the
 absolute Node executable used for installation. It does not publish or use the
 network.
 `;
@@ -342,7 +342,7 @@ async function main() {
       await applyToolbar(toolbar);
       // Default installation never opens a tab.
       if (options.open) {
-        const opened = await runHerdr(["do", "tab.new", '{"name":"Insights","mod":"insights"}'], {
+        const opened = await runHerdr(["do", "tab.new", '{"name":"Insights","mod":"insights-remote"}'], {
           env: { HERDR_APP_HOME: appHome },
         });
         relayHerdrOutput(opened);

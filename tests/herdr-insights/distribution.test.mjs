@@ -13,7 +13,7 @@ const read = (relative) => readFile(path.join(root, relative), "utf8");
 
 test("Herdr distribution has the requested folder and display name, with no layouts or bindings", async () => {
   assert.equal(path.basename(root), "herdr-insights");
-  assert.deepEqual(JSON.parse(await read("mods/insights/mod.json")), { place: "none", title: "Insights" });
+  assert.deepEqual(JSON.parse(await read("mods/insights-remote/mod.json")), { place: "none", title: "Insights" });
   await assert.rejects(lstat(path.join(root, "layouts")), { code: "ENOENT" });
   await assert.rejects(lstat(path.join(root, "keys.json")), { code: "ENOENT" });
   assert.match(await read("RECIPE.md"), /^# Insights\n/);
@@ -21,7 +21,7 @@ test("Herdr distribution has the requested folder and display name, with no layo
 
 test("distribution ships one native insights mod and no separate launcher", async () => {
   const modEntries = (await readdir(path.join(root, "mods"))).filter((name) => name !== ".DS_Store").sort();
-  assert.deepEqual(modEntries, ["insights"],
+  assert.deepEqual(modEntries, ["insights-remote"],
     "one mod owns the dashboard and its toolbar button; a second launcher must not ship");
 
   const docs = await Promise.all(["README.md", "INSTALL.md", "RECIPE.md"].map(read));
@@ -71,10 +71,10 @@ test("Distribution inspection rejects keys.json and layouts without ignoring the
   const temporary = await mkdtemp(path.join(tmpdir(), "insights-distribution-"));
   t.after(async () => rm(temporary, { recursive: true, force: true }));
   const packageRoot = path.join(temporary, "herdr-insights");
-  await mkdir(path.join(packageRoot, "mods", "insights"), { recursive: true });
+  await mkdir(path.join(packageRoot, "mods", "insights-remote"), { recursive: true });
   await copyFile(path.join(root, "preview.png"), path.join(packageRoot, "preview.png"));
   await writeFile(
-    path.join(packageRoot, "mods", "insights", "mod.json"),
+    path.join(packageRoot, "mods", "insights-remote", "mod.json"),
     '{"place":"none","title":"Insights"}\n',
   );
 
@@ -92,11 +92,11 @@ test("Distribution inspection rejects a second mod directory", async (t) => {
   const temporary = await mkdtemp(path.join(tmpdir(), "insights-second-mod-"));
   t.after(async () => rm(temporary, { recursive: true, force: true }));
   const packageRoot = path.join(temporary, "herdr-insights");
-  await mkdir(path.join(packageRoot, "mods", "insights"), { recursive: true });
+  await mkdir(path.join(packageRoot, "mods", "insights-remote"), { recursive: true });
   await mkdir(path.join(packageRoot, "mods", "insights-launcher"));
   await copyFile(path.join(root, "preview.png"), path.join(packageRoot, "preview.png"));
   await writeFile(
-    path.join(packageRoot, "mods", "insights", "mod.json"),
+    path.join(packageRoot, "mods", "insights-remote", "mod.json"),
     '{"place":"none","title":"Insights"}\n',
   );
   const errors = (await inspectDistribution(packageRoot)).errors.join("\n");

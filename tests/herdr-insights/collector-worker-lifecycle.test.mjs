@@ -5,8 +5,8 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 
-import { collectSnapshot } from "../../herdr-insights/mods/insights/collector.mjs";
-import { normalizeConfig } from "../../herdr-insights/mods/insights/core/config.mjs";
+import { collectSnapshot } from "../../herdr-insights/mods/insights-remote/collector.mjs";
+import { normalizeConfig } from "../../herdr-insights/mods/insights-remote/core/config.mjs";
 import {
   claimPidRecord,
   classifyWorkerClaim,
@@ -14,18 +14,18 @@ import {
   readWorkerClaim,
   updateWorkerClaimPid,
   workerClaimPath,
-} from "../../herdr-insights/mods/insights/core/fence.mjs";
+} from "../../herdr-insights/mods/insights-remote/core/fence.mjs";
 import {
   ensureIndexer,
   indexerPath,
   waitForIndexerAck,
-} from "../../herdr-insights/mods/insights/core/indexer-control.mjs";
+} from "../../herdr-insights/mods/insights-remote/core/indexer-control.mjs";
 import {
   emptyStore,
   loadStore,
   newFileEntry,
   saveStore,
-} from "../../herdr-insights/mods/insights/core/store.mjs";
+} from "../../herdr-insights/mods/insights-remote/core/store.mjs";
 import {
   atomicWriteJson,
   isLockBusyError,
@@ -33,7 +33,7 @@ import {
   readStoreLockInfo,
   sleep,
   withStoreLock,
-} from "../../herdr-insights/mods/insights/core/util.mjs";
+} from "../../herdr-insights/mods/insights-remote/core/util.mjs";
 
 const piSource = [{
   id: "pi",

@@ -1,11 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { deriveDashboard } from "../../herdr-insights/mods/insights/analytics.js";
+import { deriveDashboard } from "../../herdr-insights/mods/insights-remote/analytics.js";
 import {
   REMOTE_RECORD_VERSION,
   machineStatus,
   mergeSnapshots,
-} from "../../herdr-insights/mods/insights/merge.mjs";
+} from "../../herdr-insights/mods/insights-remote/merge.mjs";
 
 function row(day, session, total, extra = {}) {
   return {

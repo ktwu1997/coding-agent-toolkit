@@ -20,8 +20,8 @@ import {
   rollbackStoreTransaction,
   snapshotRows,
   taskKeyFor,
-} from "../../herdr-insights/mods/insights/core/store.mjs";
-import { scanSources } from "../../herdr-insights/mods/insights/core/scan.mjs";
+} from "../../herdr-insights/mods/insights-remote/core/store.mjs";
+import { scanSources } from "../../herdr-insights/mods/insights-remote/core/scan.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -385,11 +385,11 @@ test("replacing an archive binds the parser to fresh session state", async (t) =
 
 test("production scanning does not clone the accumulated store", async () => {
   const scanSource = await readFile(
-    path.join(here, "../../herdr-insights/mods/insights/core/scan.mjs"),
+    path.join(here, "../../herdr-insights/mods/insights-remote/core/scan.mjs"),
     "utf8",
   );
   const collectorSource = await readFile(
-    path.join(here, "../../herdr-insights/mods/insights/collector.mjs"),
+    path.join(here, "../../herdr-insights/mods/insights-remote/collector.mjs"),
     "utf8",
   );
   assert.doesNotMatch(scanSource, /structuredClone\(\s*store\s*\)/);

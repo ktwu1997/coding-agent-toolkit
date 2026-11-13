@@ -25,9 +25,9 @@ export async function inspectDistribution(packageRoot) {
 
   try {
     const mods = await fs.readdir(path.join(packageRoot, "mods"));
-    if (!mods.includes("insights")) errors.push("Distribution must contain mods/insights");
+    if (!mods.includes("insights-remote")) errors.push("Distribution must contain mods/insights-remote");
     for (const name of mods) {
-      if (name !== "insights" && name !== ".DS_Store") {
+      if (name !== "insights-remote" && name !== ".DS_Store") {
         errors.push(`Distribution ships one native mod; remove mods/${name}`);
       }
     }
@@ -54,7 +54,7 @@ export async function inspectDistribution(packageRoot) {
 
   try {
     const mod = JSON.parse(
-      await fs.readFile(path.join(packageRoot, "mods/insights/mod.json"), "utf8"),
+      await fs.readFile(path.join(packageRoot, "mods/insights-remote/mod.json"), "utf8"),
     );
     if (mod.title !== "Insights" || mod.place !== "none") {
       errors.push('mod.json must use title "Insights" and place "none"');

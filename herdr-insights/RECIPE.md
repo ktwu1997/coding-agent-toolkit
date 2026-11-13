@@ -29,7 +29,7 @@ tasks, timers, or editors. Every click shows the current space's existing Insigh
 tab (the tab whose pane runs `insights` in dashboard mode) instead of stacking
 duplicates. Focus its pane with `pane.focus`; if a different pane in that tab is
 zoomed, unzoom it first so the dashboard is visible. Call `tab.new` with
-`{name: "Insights", mod: "insights"}` only when that space has none. No floating
+`{name: "Insights", mod: "insights-remote"}` only when that space has none. No floating
 window, overlay, polling, file access, or helper process.
 
 Dashboard, top to bottom:
@@ -77,13 +77,13 @@ controls preserve custom mappings. Changing source configuration invalidates the
 scan cache; palette/cache/week-start/refresh changes preserve collected history.
 
 **Built from:** Put this distribution in `herdr-insights/`, with `RECIPE.md`,
-`README.md`, `INSTALL.md`, `preview.png`, and `mods/insights/`. Keep developer
+`README.md`, `INSTALL.md`, `preview.png`, and `mods/insights-remote/`. Keep developer
 tests, fixtures, and release-check tooling outside this distribution folder.
 Do not include a `layouts/` folder or keys snippet: no bindings are needed.
 The recipe heading and `mod.json` title are **Insights**; the native mod ID is
 `insights`.
 
-`mods/insights/mod.json` contains `{"place":"none","title":"Insights"}`.
+`mods/insights-remote/mod.json` contains `{"place":"none","title":"Insights"}`.
 `main.js` default-exports one native View using gpui-base flex builders, `theme()`,
 and `run()`. Read Herdr's `props()?.mode`: `"toolbar"` renders only the button and
 its click handler; every other value renders the dashboard and runs its collectors. The
@@ -98,7 +98,7 @@ from uninstall. Do not edit or remove Herdr-managed click state. In the personal
 block into a nonresizable row, keeping its ID, height, paint, and window-drag
 attributes. Its first child is a weight-1 block with the original `content`
 (including its props); its second is a 104px block whose content is
-`{mod: "insights", props: {mode: "toolbar"}}`.
+`{mod: "insights-remote", props: {mode: "toolbar"}}`.
 Do not copy or modify the shipped `tabs` mod. Refuse unsupported/ambiguous layouts.
 Record the personal layout's name, source, and hash in `toolbar-install.json`.
 Reinstall must not rewrite this layout or switch the user's selected layout.
@@ -143,7 +143,7 @@ Read JSONL/zstd transcripts and OpenCode/Antigravity SQLite in read-only mode.
 For Antigravity, prefer generation metadata over compact transcript exports for
 one conversation; decoding and accounting notes live in `core/antigravity.mjs`.
 The metadata-only
-store is `<HERDR_APP_HOME>/data/insights/insights.json`; never save prompt/response
+store is `<HERDR_APP_HOME>/data/insights-remote/insights.json`; never save prompt/response
 text. Use source-tagged status/warnings for missing, disabled, empty, and failed
 sources. Preserve historical rows from removed files until explicit rebuild.
 
@@ -158,7 +158,7 @@ and executable mappings. `core/config.mjs` defines and validates the full schema
 Provide dependency-free Node install/uninstall scripts. The installer requires
 Node >=22.15 and validates it before writing anything; the uninstaller intentionally
 has no Node gate so it remains usable on older runtimes. Install only the `insights`
-mod tree (plus ownership files under `data/insights/`) and generate the dashboard's
+mod tree (plus ownership files under `data/insights-remote/`) and generate the dashboard's
 `runtime.json` with the absolute installer Node path; the UI uses that path, falling
 back to `node` on PATH only for manual copies. Track ownership/hashes in
 `install-manifest.json`. Preflight every target before writing. Refuse symlinks and

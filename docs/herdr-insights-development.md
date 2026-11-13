@@ -62,7 +62,7 @@ and `insights.json`; the automated installer tests cover those boundaries.
 ## Sharing a build
 
 Keep `herdr-insights/` self-contained, with `RECIPE.md`, `INSTALL.md`, `README.md`,
-`preview.png`, and `mods/insights/`. Do not ship layouts, key snippets, developer
+`preview.png`, and `mods/insights-remote/`. Do not ship layouts, key snippets, developer
 tests/fixtures, or smoke-test tooling in that folder. One native mod serves both
 views: `props.mode: "toolbar"` renders the button, and ordinary panes render the
 dashboard. The installer preflights the mod tree, checks a temporary buffered copy

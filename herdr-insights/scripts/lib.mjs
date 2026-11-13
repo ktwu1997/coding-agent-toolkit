@@ -11,7 +11,7 @@ export const PACKAGE_ROOT = path.resolve(
 );
 export const MIN_NODE_VERSION = "22.15";
 export const RUNTIME_NAME = "runtime.json";
-const MOD_REL = "mods/insights";
+const MOD_REL = "mods/insights-remote";
 export const MANIFEST_VERSION = 1;
 export const MANIFEST_OWNER = "herdr-insights";
 export const HASH_RE = /^[0-9a-f]{64}$/;
@@ -51,7 +51,7 @@ export function modDir(appHome) {
 }
 
 export function dataDir(appHome) {
-  return path.join(appHome, "data", "insights");
+  return path.join(appHome, "data", "insights-remote");
 }
 
 export function manifestPath(appHome) {

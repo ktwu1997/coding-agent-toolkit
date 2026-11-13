@@ -2,10 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
-const mainSource = await readFile(new URL("../../herdr-insights/mods/insights/main.js", import.meta.url), "utf8");
-const analyticsSource = await readFile(new URL("../../herdr-insights/mods/insights/analytics.js", import.meta.url), "utf8");
-const uiSource = await readFile(new URL("../../herdr-insights/mods/insights/ui.js", import.meta.url), "utf8");
-const remoteSource = await readFile(new URL("../../herdr-insights/mods/insights/remote.mjs", import.meta.url), "utf8");
+const mainSource = await readFile(new URL("../../herdr-insights/mods/insights-remote/main.js", import.meta.url), "utf8");
+const analyticsSource = await readFile(new URL("../../herdr-insights/mods/insights-remote/analytics.js", import.meta.url), "utf8");
+const uiSource = await readFile(new URL("../../herdr-insights/mods/insights-remote/ui.js", import.meta.url), "utf8");
+const remoteSource = await readFile(new URL("../../herdr-insights/mods/insights-remote/remote.mjs", import.meta.url), "utf8");
 const dataUrl = (source) => `data:text/javascript;base64,${Buffer.from(source).toString("base64")}`;
 const analyticsUrl = dataUrl(analyticsSource);
 const analytics = await import(analyticsUrl);
@@ -321,8 +321,8 @@ function blankInstance() {
   instance.dashboardGeneration = 0;
   instance.refreshWatchdog = null;
   instance.saveWatchdog = null;
-  instance.presenterPath = () => "/app/mods/insights/presenter.mjs";
-  instance.storePath = () => "/app/data/insights/insights.json";
+  instance.presenterPath = () => "/app/mods/insights-remote/presenter.mjs";
+  instance.storePath = () => "/app/data/insights-remote/insights.json";
   return instance;
 }
 
@@ -346,7 +346,7 @@ function savedSnapshot() {
 
 function configDraft() {
   return {
-    profile: { name: "Draft", handle: "draft", avatar: "mods/insights/draft.png" },
+    profile: { name: "Draft", handle: "draft", avatar: "mods/insights-remote/draft.png" },
     includeCache: false,
     weekStartsOn: 1,
     refreshSeconds: 120,
@@ -370,7 +370,7 @@ test("native mod keeps timers and shell use inside the Herdr contract", () => {
   assert.doesNotMatch(mainSource, /\bsh\s*,\s*\[/);
   assert.doesNotMatch(mainSource, /--rebuild/);
   assert.match(mainSource, /readTextFile\(this\.runtimePath\(\)\)/);
-  assert.match(mainSource, /mods\/insights\/runtime\.json/);
+  assert.match(mainSource, /mods\/insights-remote\/runtime\.json/);
   assert.equal((mainSource.match(/exec\(this\.nodeBinary, \[/g) ?? []).length, 4);
   assert.match(mainSource, /exec\(this\.nodeBinary, \[this\.presenterPath\(\), "bundle"\]\)/);
   assert.match(mainSource, /presenter\.mjs/);
@@ -541,7 +541,7 @@ test("toolbar reuses the active space's dashboard and reveals it behind another 
   state.spaces = [{ id: "s1", active: true, tabs: [{ id: "t1" }, { id: "t2" }] }];
   state.panes = [
     { pane: "terminal", mod: "terminal", tab: "t2", zoomed: true },
-    { pane: "dashboard", mod: "insights", tab: "t2", focused: false, zoomed: false },
+    { pane: "dashboard", mod: "insights-remote", tab: "t2", focused: false, zoomed: false },
   ];
   const instance = new Insights();
   state.props = { mode: "toolbar" };
@@ -562,7 +562,7 @@ test("toolbar reuses the active space's dashboard and reveals it behind another 
 test("toolbar keeps an already zoomed dashboard and opens a tab only when the space has none", () => {
   const state = useHerdr();
   state.spaces = [{ id: "s1", active: true, tabs: [{ id: "t1" }] }];
-  state.panes = [{ pane: "dashboard", mod: "insights", tab: "t1", zoomed: true }];
+  state.panes = [{ pane: "dashboard", mod: "insights-remote", tab: "t1", zoomed: true }];
   const instance = new Insights();
   state.props = { mode: "toolbar" };
   instance.init({}, fakeCx());
@@ -574,16 +574,16 @@ test("toolbar keeps an already zoomed dashboard and opens a tab only when the sp
   state.panes = [];
   state.commands.length = 0;
   click();
-  assert.deepEqual(state.commands, [["tab.new", { name: "Insights", mod: "insights" }]]);
+  assert.deepEqual(state.commands, [["tab.new", { name: "Insights", mod: "insights-remote" }]]);
 
   state.spaces = [
     { id: "s1", active: true, tabs: [{ id: "t1" }] },
     { id: "s2", active: false, tabs: [{ id: "t2" }] },
   ];
-  state.panes = [{ mod: "insights", tab: "t2" }];
+  state.panes = [{ mod: "insights-remote", tab: "t2" }];
   state.commands.length = 0;
   click();
-  assert.deepEqual(state.commands, [["tab.new", { name: "Insights", mod: "insights" }]],
+  assert.deepEqual(state.commands, [["tab.new", { name: "Insights", mod: "insights-remote" }]],
     "an Insights tab in another space never satisfies the current space");
 });
 
@@ -596,7 +596,7 @@ test("init reads the runtime config once and waits before the first snapshot", a
   instance.init({}, cx);
 
   await flush();
-  assert.deepEqual(state.runtimeReads, ["/app/mods/insights/runtime.json"]);
+  assert.deepEqual(state.runtimeReads, ["/app/mods/insights-remote/runtime.json"]);
   assert.equal(state.execCalls.length, 0, "no collector may start before runtime.json resolves");
   assert.equal(calls.timers.length, 0, "no poll may start before runtime.json resolves");
 
@@ -827,7 +827,7 @@ test("usage logos prefer model marks, then provider marks, then initials", async
     "openai.svg",
     "opencode.svg",
     "xai.svg",
-  ].map((file) => readFile(new URL(`../../herdr-insights/mods/insights/logos/${file}`, import.meta.url))));
+  ].map((file) => readFile(new URL(`../../herdr-insights/mods/insights-remote/logos/${file}`, import.meta.url))));
 });
 
 test("model usage leaderboard is models-only with ranked change rows", () => {
@@ -1046,7 +1046,7 @@ test("initial async snapshot publishes the dashboard before settings host contro
 test("form saves preserve the legacy profile and multi-root source mappings", () => {
   const instance = blankInstance();
   const saved = savedSnapshot();
-  const profile = { name: "Legacy Name", handle: "legacy", avatar: "mods/insights/legacy.png" };
+  const profile = { name: "Legacy Name", handle: "legacy", avatar: "mods/insights-remote/legacy.png" };
   const mapping = { session: "session.id", timestamp: "ts", usage: { input: "usage.input" } };
   saved.config.profile = profile;
   saved.config.sources = [{
@@ -1624,12 +1624,12 @@ test("remote machines sync with exec on, save only aggregated files, and re-prep
   assert.ok(remoteCalls.length >= 2);
   assert.ok(remoteCalls.every((call) => call.options?.on === "box"), "remote commands run only on the ready machine");
   assert.equal(state.execCalls.filter((call) => call.args?.[1] === "bundle").length, 1);
-  const rowsFile = JSON.parse(state.files["/app/data/insights/machines/box.rows.json"]);
+  const rowsFile = JSON.parse(state.files["/app/data/insights-remote/machines/box.rows.json"]);
   assert.equal(rowsFile.kind, "insights-remote-machine-rows");
   assert.equal(rowsFile.envelope.rowCount, 0);
-  assert.equal(JSON.parse(state.files["/app/data/insights/machines/box.state.json"]).error, null);
-  assert.match(JSON.parse(state.files["/app/data/insights/machines/gone.state.json"]).error, /offline/);
-  assert.equal(state.files["/app/data/insights/machines/gone.rows.json"], undefined);
+  assert.equal(JSON.parse(state.files["/app/data/insights-remote/machines/box.state.json"]).error, null);
+  assert.match(JSON.parse(state.files["/app/data/insights-remote/machines/gone.state.json"]).error, /offline/);
+  assert.equal(state.files["/app/data/insights-remote/machines/gone.rows.json"], undefined);
   assert.equal(Object.keys(state.files).some((file) => file.includes("wait")), false);
   const prepares = state.execCalls.filter((call) => call.args?.[1] === "prepare");
   assert.ok(prepares.some((call) => optionArgument(call.args).remoteRevision >= 1), "a finished sync re-prepares the dashboard");
@@ -1642,8 +1642,8 @@ test("a failed remote keeps its last rows and records the error for the machine"
   const instance = new Insights();
   instance.init({}, cx);
   await settle();
-  assert.equal(state.files["/app/data/insights/machines/box.rows.json"], undefined);
-  assert.match(JSON.parse(state.files["/app/data/insights/machines/box.state.json"]).error, /disk full/);
+  assert.equal(state.files["/app/data/insights-remote/machines/box.rows.json"], undefined);
+  assert.match(JSON.parse(state.files["/app/data/insights-remote/machines/box.state.json"]).error, /disk full/);
   assert.match(instance.remoteView("box").error, /disk full/);
   instance.close();
 });

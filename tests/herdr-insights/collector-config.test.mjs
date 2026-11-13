@@ -20,12 +20,12 @@ import {
   defaultConfig,
   migrateLoadedConfig,
   normalizeConfig,
-} from "../../herdr-insights/mods/insights/core/config.mjs";
-import { emptyStore, newFileEntry, saveStore } from "../../herdr-insights/mods/insights/core/store.mjs";
-import { DEFAULT_SOURCES } from "../../herdr-insights/mods/insights/analytics.js";
+} from "../../herdr-insights/mods/insights-remote/core/config.mjs";
+import { emptyStore, newFileEntry, saveStore } from "../../herdr-insights/mods/insights-remote/core/store.mjs";
+import { DEFAULT_SOURCES } from "../../herdr-insights/mods/insights-remote/analytics.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const collector = path.join(here, "../../herdr-insights", "mods", "insights", "collector.mjs");
+const collector = path.join(here, "../../herdr-insights", "mods", "insights-remote", "collector.mjs");
 const fixtures = path.join(here, "fixtures");
 
 async function env() {
@@ -620,7 +620,7 @@ test("default config source order and shape round-trip through configure", async
     "pi-main.jsonl",
   );
   const config = {
-    profile: { name: "Dev", handle: "@dev", avatar: "data/insights/avatar.png" },
+    profile: { name: "Dev", handle: "@dev", avatar: "data/insights-remote/avatar.png" },
     palette: "purple",
     includeCache: false,
     weekStartsOn: 1,

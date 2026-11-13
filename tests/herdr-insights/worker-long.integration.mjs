@@ -11,10 +11,10 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import * as zlib from "node:zlib";
 
-import { collectSnapshot } from "../../herdr-insights/mods/insights/collector.mjs";
-import { readWorkerClaim } from "../../herdr-insights/mods/insights/core/fence.mjs";
-import { snapshotRows } from "../../herdr-insights/mods/insights/core/store.mjs";
-import { isProcessAlive, sleep } from "../../herdr-insights/mods/insights/core/util.mjs";
+import { collectSnapshot } from "../../herdr-insights/mods/insights-remote/collector.mjs";
+import { readWorkerClaim } from "../../herdr-insights/mods/insights-remote/core/fence.mjs";
+import { snapshotRows } from "../../herdr-insights/mods/insights-remote/core/store.mjs";
+import { isProcessAlive, sleep } from "../../herdr-insights/mods/insights-remote/core/util.mjs";
 
 const STREAM_DELAY_MS = 200;
 const RAW_BYTES = 10_000_000;

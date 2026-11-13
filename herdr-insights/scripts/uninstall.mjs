@@ -28,10 +28,10 @@ Options:
   --app-home <folder>   Herdr app home (default: $HERDR_APP_HOME or ~/.config/herdr-app)
   -h, --help            Show this help
 
-Only files recorded in data/insights/install-manifest.json are removed, and only
+Only files recorded in data/insights-remote/install-manifest.json are removed, and only
 when their content still matches. The owned personal toolbar layout is removed
 only if unchanged; Herdr returns to the original layout first. Edited/unowned
-files, shipped layouts, keys and data/insights/insights.json are left alone.
+files, shipped layouts, keys and data/insights-remote/insights.json are left alone.
 `;
 }
 
@@ -175,7 +175,7 @@ async function applyUninstall(plan) {
   for (const entry of kept) {
     console.warn(`Kept ${entry}.`);
   }
-  console.log("Left data/insights, insights.json and unowned files in place.");
+  console.log("Left data/insights-remote, insights.json and unowned files in place.");
 }
 
 async function main() {

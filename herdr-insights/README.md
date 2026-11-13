@@ -25,8 +25,8 @@ npm run install:local --prefix herdr-insights
 
 With Herdr running, the installer checks the `insights` mod and adds an
 **Insights** button beside the native tabs; clicking it reuses the current
-space's dashboard tab, opening one only when absent. It installs `mods/insights/`
-and records ownership in `data/insights/`. Shipped files, tabs, keys, terminals,
+space's dashboard tab, opening one only when absent. It installs `mods/insights-remote/`
+and records ownership in `data/insights-remote/`. Shipped files, tabs, keys, terminals,
 and usage data are unchanged. See [INSTALL.md](INSTALL.md) for the layout and
 click-state rules. Set `HERDR_APP_HOME` to use a different app home.
 
@@ -44,19 +44,19 @@ click-state rules. Set `HERDR_APP_HOME` to use a different app home.
 
 No network requests or uploads. The mod runs a local Node helper, reads session
 files and OpenCode/Antigravity SQLite databases, and writes usage metadata to
-`~/.config/herdr-app/data/insights/insights.json`. It does not store prompt or
+`~/.config/herdr-app/data/insights-remote/insights.json`. It does not store prompt or
 response text or modify source transcripts.
 
 For each other machine connected to Herdr, the mod uses Herdr's own connection
 to install its collector under `~/.cache/herdr-insights/` on that machine and
 run it there at low priority (Node.js 22.15+ required there too). Transcripts
 stay on that machine. Only per-day token totals come back, saved under
-`data/insights/machines/`.
+`data/insights-remote/machines/`.
 
 ## Development
 
-One native mod, `mods/insights`, provides both views. A pane whose content is
-`{mod: "insights", props: {mode: "toolbar"}}` renders only the button; any other
+One native mod, `mods/insights-remote`, provides both views. A pane whose content is
+`{mod: "insights-remote", props: {mode: "toolbar"}}` renders only the button; any other
 pane shows the dashboard. Toolbar mode starts no Node helper, scans, tasks,
 timers, or editors. No layouts or key bindings ship; the button lives in a
 personal layout clone composed by the installer, which wraps the native tabs

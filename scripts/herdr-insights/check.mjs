@@ -119,8 +119,8 @@ async function checkFiles() {
     "INSTALL.md",
     "RECIPE.md",
     "preview.png",
-    "mods/insights/main.js",
-    "mods/insights/mod.json",
+    "mods/insights-remote/main.js",
+    "mods/insights-remote/mod.json",
     "scripts/install.mjs",
     "scripts/lib.mjs",
     "scripts/toolbar.mjs",
@@ -204,9 +204,9 @@ async function checkDistribution() {
 async function checkSource() {
   try {
     const source = await collectSourceFiles(PACKAGE_ROOT);
-    notes.push(`mods/insights source tree validates (${source.files.length} files)`);
+    notes.push(`mods/insights-remote source tree validates (${source.files.length} files)`);
   } catch (error) {
-    fail(`mods/insights source tree is invalid: ${error.message}`);
+    fail(`mods/insights-remote source tree is invalid: ${error.message}`);
   }
 }
 

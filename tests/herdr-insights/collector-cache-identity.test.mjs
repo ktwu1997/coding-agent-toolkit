@@ -4,15 +4,15 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 
-import { readCommittedSnapshot } from "../../herdr-insights/mods/insights/collector.mjs";
+import { readCommittedSnapshot } from "../../herdr-insights/mods/insights-remote/collector.mjs";
 import {
   presentationCachePath,
   readPresentationCache,
   storeRevisionFingerprint,
-} from "../../herdr-insights/mods/insights/core/cache.mjs";
-import { normalizeConfig } from "../../herdr-insights/mods/insights/core/config.mjs";
-import { emptyStore, saveStore } from "../../herdr-insights/mods/insights/core/store.mjs";
-import { atomicWriteJson } from "../../herdr-insights/mods/insights/core/util.mjs";
+} from "../../herdr-insights/mods/insights-remote/core/cache.mjs";
+import { normalizeConfig } from "../../herdr-insights/mods/insights-remote/core/config.mjs";
+import { emptyStore, saveStore } from "../../herdr-insights/mods/insights-remote/core/store.mjs";
+import { atomicWriteJson } from "../../herdr-insights/mods/insights-remote/core/util.mjs";
 
 function storeWith(name, generation = 0) {
   const store = emptyStore(normalizeConfig({

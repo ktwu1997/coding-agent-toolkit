@@ -78,7 +78,7 @@ export function withInsightsToolbar(layout) {
   tabs.resizable = false;
   tabs.children = [
     { id: "insights-original-tabs", type: "block", size: { weight: 1 }, content },
-    { id: BUTTON_ID, type: "block", size: { px: 104 }, content: { mod: "insights", props: { mode: "toolbar" } } },
+    { id: BUTTON_ID, type: "block", size: { px: 104 }, content: { mod: "insights-remote", props: { mode: "toolbar" } } },
   ];
   return copy;
 }

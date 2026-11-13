@@ -5,13 +5,13 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { isPresentation, normalizeConfig } from "../../herdr-insights/mods/insights/analytics.js";
-import { run as runPresenter } from "../../herdr-insights/mods/insights/presenter.mjs";
+import { isPresentation, normalizeConfig } from "../../herdr-insights/mods/insights-remote/analytics.js";
+import { run as runPresenter } from "../../herdr-insights/mods/insights-remote/presenter.mjs";
 import {
   emptyStore,
   newFileEntry,
   saveStore,
-} from "../../herdr-insights/mods/insights/core/store.mjs";
+} from "../../herdr-insights/mods/insights-remote/core/store.mjs";
 
 const TODAY = "2026-03-04";
 const OPTIONS = {

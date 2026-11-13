@@ -23,10 +23,10 @@ import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:f
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { compactDashboard, deriveDashboard, todayKey } from "../../herdr-insights/mods/insights/analytics.js";
+import { compactDashboard, deriveDashboard, todayKey } from "../../herdr-insights/mods/insights-remote/analytics.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const modSource = resolve(here, "../../herdr-insights/mods/insights");
+const modSource = resolve(here, "../../herdr-insights/mods/insights-remote");
 
 function argument(name, fallback) {
   const index = process.argv.indexOf(name);
@@ -45,7 +45,7 @@ const baseSnapshot = snapshotPath
       generatedAt: new Date().toISOString(),
       lastScanAt: new Date().toISOString(),
       config: {
-        profile: { name: "Legacy", handle: "legacy", avatar: "mods/insights/legacy.png" },
+        profile: { name: "Legacy", handle: "legacy", avatar: "mods/insights-remote/legacy.png" },
         palette: "blue",
         includeCache: true,
         weekStartsOn: 0,
@@ -92,7 +92,7 @@ try {
     sources: [{ id: "fixture", label: "Fixture", adapter: "pi", enabled: true, roots: [fixtureRoot] }],
   };
 
-  const mod = join(home, "mods/insights");
+  const mod = join(home, "mods/insights-remote");
   cpSync(modSource, mod, { recursive: true });
 
   const mainPath = join(mod, "main.js");
