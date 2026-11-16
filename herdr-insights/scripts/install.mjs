@@ -342,7 +342,7 @@ async function main() {
       await applyToolbar(toolbar);
       // Default installation never opens a tab.
       if (options.open) {
-        const opened = await runHerdr(["do", "tab.new", '{"name":"Insights","mod":"insights-remote"}'], {
+        const opened = await runHerdr(["do", "tab.new", '{"name":"Insights+","mod":"insights-remote"}'], {
           env: { HERDR_APP_HOME: appHome },
         });
         relayHerdrOutput(opened);

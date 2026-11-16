@@ -38,7 +38,7 @@ test("the previously documented --open flag opens exactly one tab only after suc
   const fake = await createFakeRunner(root);
   assertSuccess(runInstall({ appHome, fake, sourceRoot, extra: ["--open"] }));
   let log = await readLog(fake);
-  assert.deepEqual(log.at(-1).args, ["do", "tab.new", '{"name":"Insights","mod":"insights-remote"}']);
+  assert.deepEqual(log.at(-1).args, ["do", "tab.new", '{"name":"Insights+","mod":"insights-remote"}']);
   assert.equal(log.filter((entry) => entry.args[1] === "tab.new").length, 1);
   const result = runInstall({ appHome, fake, sourceRoot, extra: ["--open"], fail: "check" });
   assertFailure(result);

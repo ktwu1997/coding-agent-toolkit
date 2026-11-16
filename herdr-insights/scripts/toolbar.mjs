@@ -7,7 +7,8 @@ import {
 
 const RECORD = "toolbar-install.json";
 const OWNER = "herdr-insights-toolbar";
-const BUTTON_ID = "insights-toolbar-button";
+const BUTTON_ID = "insights-remote-toolbar-button";
+const WRAPPED_TABS_ID = "insights-remote-original-tabs";
 const NAME = /^[a-zA-Z0-9][a-zA-Z0-9_-]*$/;
 
 function assertName(name) {
@@ -64,10 +65,10 @@ export function withInsightsToolbar(layout) {
     for (const child of node.children ?? []) walk(child);
   }
   walk(copy);
-  if (nodes.some((node) => node.id === BUTTON_ID || node.id === "insights-original-tabs")) {
+  if (nodes.some((node) => node.id === BUTTON_ID || node.id === WRAPPED_TABS_ID)) {
     throw new Error("This layout already contains Insights toolbar blocks.");
   }
-  const matches = nodes.filter((node) => node.id === "tabs" && node.type === "block" && node.content?.mod === "tabs");
+  const matches = nodes.filter((node) => node.type === "block" && node.content?.mod === "tabs");
   if (matches.length !== 1) {
     throw new Error('Expected one native "tabs" block. This layout cannot be integrated safely.');
   }
@@ -77,7 +78,7 @@ export function withInsightsToolbar(layout) {
   tabs.type = "row";
   tabs.resizable = false;
   tabs.children = [
-    { id: "insights-original-tabs", type: "block", size: { weight: 1 }, content },
+    { id: WRAPPED_TABS_ID, type: "block", size: { weight: 1 }, content },
     { id: BUTTON_ID, type: "block", size: { px: 104 }, content: { mod: "insights-remote", props: { mode: "toolbar" } } },
   ];
   return copy;

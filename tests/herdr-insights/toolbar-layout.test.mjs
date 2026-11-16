@@ -27,7 +27,7 @@ test("layout composition keeps the original tabs code and points the toolbar at 
   assert.deepEqual(row.children[0].content, tabs.content);
   assert.deepEqual(row.children[0].size, { weight: 1 });
   assert.deepEqual(row.children[1], {
-    id: "insights-toolbar-button",
+    id: "insights-remote-toolbar-button",
     type: "block",
     size: { px: 104 },
     content: SINGLE_TOOLBAR_CONTENT,
@@ -35,4 +35,30 @@ test("layout composition keeps the original tabs code and points the toolbar at 
   assert.throws(() => withInsightsToolbar(integrated), /already contains/);
   assert.throws(() => withInsightsToolbar({ id: "root", type: "row", children: [] }), /cannot be integrated safely/);
   assert.throws(() => withInsightsToolbar({ id: "root", type: "row", children: [tabs, tabs] }), /cannot be integrated safely/);
+});
+
+test("the fork composes beside a layout the original Insights installer already composed", () => {
+  const nativeTabs = { mod: "tabs", props: {} };
+  const original = {
+    id: "root", type: "column", children: [
+      {
+        id: "tabs", type: "row", resizable: false, size: { px: 42 }, children: [
+          { id: "insights-original-tabs", type: "block", size: { weight: 1 }, content: nativeTabs },
+          { id: "insights-toolbar-button", type: "block", size: { px: 104 }, content: { mod: "insights", props: { mode: "toolbar" } } },
+        ],
+      },
+      { id: "main", type: "block", content: { tab: "active" } },
+    ],
+  };
+  const integrated = withInsightsToolbar(original);
+  const ids = [];
+  (function walk(node) { ids.push(node.id); for (const child of node.children ?? []) walk(child); })(integrated);
+  assert.equal(new Set(ids).size, ids.length, "node ids stay unique");
+  assert.ok(ids.includes("insights-toolbar-button"), "the original button is kept");
+  const row = integrated.children[0].children[0];
+  assert.equal(row.id, "insights-original-tabs");
+  assert.equal(row.type, "row");
+  assert.deepEqual(row.children[0].content, nativeTabs);
+  assert.deepEqual(row.children[1].content, SINGLE_TOOLBAR_CONTENT);
+  assert.throws(() => withInsightsToolbar(integrated), /already contains/);
 });

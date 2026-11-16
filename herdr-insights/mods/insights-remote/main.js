@@ -54,7 +54,7 @@ const MIN_CELL = 12;
 const MAX_CELL = 20;
 const CELL_GAP = 2;
 const DAY_LABEL_WIDTH = 30;
-const TAB = { name: "Insights", mod: "insights-remote" };
+const TAB = { name: "Insights+", mod: "insights-remote" };
 
 function shortFileName(value) {
   if (typeof value !== "string" || value.length === 0) return "";
@@ -1705,7 +1705,7 @@ export default class Insights extends View {
         .on_mouse_down("left", (_event, cx) => cx.stop_propagation())
         .on_click(() => showInsights())
         .child(svg("mods/insights-remote/insights.svg").size(14))
-        .child("Insights"));
+        .child("Insights+"));
   }
 
   header(c) {

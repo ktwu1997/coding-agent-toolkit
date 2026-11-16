@@ -519,7 +519,7 @@ test("toolbar render is only the native Insights button and has no side effects"
   const root = instance.render();
   const button = root.childNodes[0];
 
-  assert.equal(button.childNodes[1], "Insights");
+  assert.equal(button.childNodes[1], "Insights+");
   assert.equal(button.calls.find(([name]) => name === "id")[1][0], "insights-open");
   for (const [method, value] of [["h", 26], ["px", 8], ["gap", 5], ["rounded", 6], ["text_size", 12]]) {
     assert.ok(button.calls.some(([name, args]) => name === method && args[0] === value),
@@ -574,7 +574,7 @@ test("toolbar keeps an already zoomed dashboard and opens a tab only when the sp
   state.panes = [];
   state.commands.length = 0;
   click();
-  assert.deepEqual(state.commands, [["tab.new", { name: "Insights", mod: "insights-remote" }]]);
+  assert.deepEqual(state.commands, [["tab.new", { name: "Insights+", mod: "insights-remote" }]]);
 
   state.spaces = [
     { id: "s1", active: true, tabs: [{ id: "t1" }] },
@@ -583,7 +583,7 @@ test("toolbar keeps an already zoomed dashboard and opens a tab only when the sp
   state.panes = [{ mod: "insights-remote", tab: "t2" }];
   state.commands.length = 0;
   click();
-  assert.deepEqual(state.commands, [["tab.new", { name: "Insights", mod: "insights-remote" }]],
+  assert.deepEqual(state.commands, [["tab.new", { name: "Insights+", mod: "insights-remote" }]],
     "an Insights tab in another space never satisfies the current space");
 });
 

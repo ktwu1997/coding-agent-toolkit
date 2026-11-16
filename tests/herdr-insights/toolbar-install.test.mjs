@@ -33,7 +33,7 @@ function toolbarButton(layout) {
     for (const child of node?.children ?? []) walk(child);
   };
   walk(layout);
-  return nodes.find((node) => node.id === "insights-toolbar-button");
+  return nodes.find((node) => node.id === "insights-remote-toolbar-button");
 }
 
 
